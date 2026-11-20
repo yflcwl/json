@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "canvasSizes": {
+    "960x600": [
+      960,
+      600
+    ],
+    "1280x720": [
+      1280,
+      720
+    ],
+    "1920x1080": [
+      1920,
+      1080
+    ],
+    "390x844": [
+      390,
+      844
+    ]
+  },
+  "definitions": {
+    "button": {
+      "name": "按钮",
+      "width": 120,
+      "height": 44,
+      "minHeight": 24,
+      "content": "按钮",
+      "usage": "行动提示，14px 居中文字。页面不会执行导航。"
+    },
+    "text": {
+      "name": "文本",
+      "width": 200,
+      "height": 48,
+      "minHeight": 24,
+      "content": "文本内容",
+      "usage": "正文、对齐的数据列，18px 左对齐，支持换行。空内容配背景色可做衬底。"
+    },
+    "card": {
+      "name": "卡片",
+      "width": 240,
+      "height": 140,
+      "minHeight": 24,
+      "content": "卡片标题",
+      "description": "卡片描述",
+      "usage": "摘要、指标、说明。圆角带边框，标题 16px，描述 12px。"
+    },
+    "heading": {
+      "name": "标题",
+      "width": 280,
+      "height": 56,
+      "minHeight": 24,
+      "content": "页面标题",
+      "usage": "页面主标题、区块标题，28px 粗体左对齐。"
+    },
+    "tag": {
+      "name": "标签",
+      "width": 100,
+      "height": 32,
+      "minHeight": 24,
+      "content": "标签",
+      "usage": "短状态、分类，12px 居中，胶囊形。"
+    },
+    "divider": {
+      "name": "分隔线",
+      "width": 240,
+      "height": 24,
+      "minHeight": 12,
+      "content": "",
+      "usage": "水平分隔线，2px 粗，backgroundColor 设置线条色。"
+    }
+  },
+  "limits": {
+    "maxComponents": 200,
+    "minWidth": 40,
+    "maxContentLength": 200,
+    "maxDescriptionLength": 500,
+    "timelineDuration": 10000,
+    "timelineMinDuration": 100,
+    "colorPattern": "^#[0-9a-fA-F]{6}$",
+    "idPattern": "^[a-z0-9]{5}$"
+  },
+  "animation": {
+    "triggers": [
+      "click",
+      "hover"
+    ],
+    "effects": [
+      "none",
+      "shadow",
+      "scale",
+      "rotate"
+    ],
+    "default": {
+      "trigger": "click",
+      "effect": "none"
+    }
+  },
+  "timelineDefault": {
+    "effect": "none",
+    "start": 0,
+    "duration": 700
+  }
+}

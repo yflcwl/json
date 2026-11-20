@@ -1,0 +1,31 @@
+server:
+  address: 127.0.0.1
+  port: 8086
+
+spring:
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-cache: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+
+logging:
+  charset:
+    console: UTF-8
+  level:
+    root: INFO
+    demo.hb: DEBUG
+
+sketch:
+  data-directory: ${SKETCH_DATA_DIRECTORY:./sketch-data}
+  ui-url: ${SKETCH_UI_URL:http://127.0.0.1:8086}
+  agent:
+    url: ${SKETCH_AGENT_URL:http://127.0.0.1:8083}
+    connect-timeout: 30s
+    request-timeout: 3600m
+  generation:
+    max-page-bytes: 524288

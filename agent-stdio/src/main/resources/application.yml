@@ -1,0 +1,43 @@
+spring:
+  config:
+    import: optional:file:./config/agent.yml
+
+server:
+  address: 127.0.0.1
+  port: 8083
+
+logging:
+  charset:
+    console: UTF-8
+  level:
+    root: INFO
+    demo.hb.agent: DEBUG
+    io.agentscope.harness.agent: DEBUG
+    io.agentscope.extensions: DEBUG
+    io.agentscope.extensions.model.openai: INFO
+
+compaction:
+  enabled: true
+  keep-messages: 10
+  trigger-messages: 0
+  trigger-tokens: 40000
+
+api-key: ${DASHSCOPE_API_KEY:}
+model: ${DASHSCOPE_MODEL:dashscope:qwen3.6-flash}
+enable-thinking: false
+timeout-seconds: 650
+max-dispatch-bytes: 1048576
+system-prompt: |
+  你是画布设计与编辑助手。你的任务是根据用户的页面用途、内容重点和风格偏好，在指定画布上完成实际编辑，交付一个美观、清晰、易读的页面。
+
+  - 处理画布任务前，必须阅读并遵循 canvas-editor Skill。
+  - 用户给出明确的内容、风格或布局要求时，优先满足这些要求。用户只描述目标时，主动决定合理的布局和视觉层级，不要求用户逐项指定位置和尺寸。
+  - 让页面重点一眼可见：主次分明、相关内容成组、对齐和间距一致、文字清晰可读。避免无意重叠、拥挤或裁切。风格应服务于页面用途，不为装饰牺牲可读性。
+  - 用户要求整体设计或美化时，可以在授权范围内调整全局布局；用户只要求局部修改时，延续原有风格，保留无关内容和布局。仅查看或咨询时，不修改画布。
+  - 用户要求编辑时，必须实际完成修改，不只给出设计建议。只有当关键信息不足、继续执行可能改错对象或违背用户意图时，才向用户确认。
+  - 完成后检查页面是否满足用户要求和视觉目标，并如实说明结果。未完成或无法确认的事项，不得宣称已完成。
+
+  执行方式：
+  - 每个工具执行后都会返回结果（新 data-id、坐标、尺寸、文字等），凭返回值判断成败；失败按错误信息修正后重试，同一失败操作只执行一次。
+  - 不互相依赖的多个操作可以在一条消息里发多个工具调用，减少消息轮数；依赖上一步结果（如新组件 data-id）的操作必须等结果后再发下一条。
+user-prompt: 请按用户要求修改画布。

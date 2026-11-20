@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>组件编辑器</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/component-editor.css">
+  <script type="module" src="/component-editor.js"></script>
+  <script type="module" src="/chat.js"></script>
+</head>
+<body class="component-editor" data-mode="edit">
+  <main class="studio">
+    <header class="masthead">
+      <div class="toolbar">
+        <div id="canvas-picker" class="canvas-picker">
+          <button id="canvas-picker-button" type="button" aria-haspopup="true" aria-expanded="false">
+            <span id="canvas-picker-current" class="picker-current">画布</span>
+            <span class="picker-caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="canvas-picker-menu" class="canvas-picker-menu" hidden>
+            <div id="canvas-picker-list" class="canvas-picker-list"></div>
+            <div class="canvas-picker-actions">
+              <button id="canvas-picker-new" type="button"><span aria-hidden="true">＋</span> 新建画布</button>
+            </div>
+          </div>
+        </div>
+        <span id="save-status" class="save-status" role="status" aria-live="polite">本地自动保存</span>
+        <div class="mode-switch" role="group" aria-label="工作模式">
+          <button type="button" data-mode="edit" aria-pressed="true">编辑</button>
+          <button type="button" data-mode="preview" aria-pressed="false"><span aria-hidden="true">▷</span> 预览</button>
+        </div>
+      </div>
+    </header>
+    <div class="workbench">
+      <section id="canvas-panel" class="panel canvas-panel" aria-labelledby="canvas-title">
+        <header class="panel-heading">
+          <button class="panel-fold" type="button" data-fold="canvas" aria-label="收起页面画布" aria-expanded="true"><span class="fold-chevron" aria-hidden="true">▾</span></button>
+          <div class="heading-title"><span class="section-number">01</span><h2 id="canvas-title">页面画布</h2><span id="mode-label" class="badge">编辑模式</span></div>
+          <div class="canvas-tools">
+            <div class="zoom-controls" role="group" aria-label="画布缩放">
+              <button id="zoom-out" type="button" aria-label="缩小画布">−</button>
+              <button id="zoom-reset" type="button" aria-label="恢复 100% 缩放" title="恢复 100%">100%</button>
+              <button id="zoom-in" type="button" aria-label="放大画布">＋</button>
+              <button id="zoom-fit" type="button" aria-pressed="false">适应窗口</button>
+              <button id="zoom-width" type="button" aria-pressed="true">铺满宽度</button>
+            </div>
+            <label class="size-picker" for="canvas-size">画布尺寸
+              <select id="canvas-size"><option value="960x600">960 × 600</option><option value="1280x720">1280 × 720</option><option value="1920x1080">1920 × 1080</option><option value="390x844">390 × 844</option></select>
+            </label>
+          </div>
+        </header>
+        <div class="canvas-viewport" tabindex="0" aria-label="画布滚动区域">
+          <div class="canvas-sheet">
+            <div id="canvas" class="canvas" aria-label="组件画布">
+              <div id="canvas-empty" class="canvas-empty"><span class="empty-grid" aria-hidden="true">＋</span><p>从右侧拖入组件</p></div>
+            </div>
+          </div>
+        </div>
+        <footer class="canvas-footer"><span id="canvas-hint">拖入组件后，点击选中，拖动调整位置。</span><span id="component-count">0 个组件</span></footer>
+      </section>
+      <div id="vertical-splitter" class="panel-splitter vertical-splitter" role="separator" tabindex="0"
+           aria-label="调整组件库和画布宽度" aria-orientation="vertical" aria-controls="component-library canvas-panel"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" title="左右拖动调整宽度"></div>
+      <aside id="component-library" class="panel library" aria-labelledby="library-title">
+        <header class="panel-heading"><button class="panel-fold" type="button" data-fold="library" aria-label="收起组件库" aria-expanded="true"><span class="fold-chevron" aria-hidden="true">▾</span></button><div class="heading-title"><span class="section-number">02</span><h2 id="library-title">组件库</h2></div><span class="badge">6</span></header>
+        <div class="library-items">
+          <button class="library-item" type="button" data-type="button" aria-label="按住拖到画布添加">
+            <span class="component-thumbnail"><span class="sample-button">Button <span>↗</span></span></span>
+            <span class="library-caption"><span><strong>按钮</strong><small>BUTTON</small></span><span class="drag-grip" aria-hidden="true">⠿</span></span>
+          </button>
+          <button class="library-item" type="button" data-type="text" aria-label="按住拖到画布添加">
+            <span class="component-thumbnail sample-text">Aa<span class="text-lines" aria-hidden="true"></span></span>
+            <span class="library-caption"><span><strong>文本</strong><small>TEXT</small></span><span class="drag-grip" aria-hidden="true">⠿</span></span>
+          </button>
+          <button class="library-item" type="button" data-type="card" aria-label="按住拖到画布添加">
+            <span class="component-thumbnail"><span class="sample-card"><span class="sample-card-icon">◈</span><span class="card-lines" aria-hidden="true"></span></span></span>
+            <span class="library-caption"><span><strong>卡片</strong><small>CARD</small></span><span class="drag-grip" aria-hidden="true">⠿</span></span>
+          </button>
+          <button class="library-item" type="button" data-type="heading" aria-label="按住拖到画布添加">
+            <span class="component-thumbnail sample-heading">H1</span>
+            <span class="library-caption"><span><strong>标题</strong><small>HEADING</small></span><span class="drag-grip" aria-hidden="true">⠿</span></span>
+          </button>
+          <button class="library-item" type="button" data-type="tag" aria-label="按住拖到画布添加">
+            <span class="component-thumbnail"><span class="sample-tag">标签</span></span>
+            <span class="library-caption"><span><strong>标签</strong><small>TAG</small></span><span class="drag-grip" aria-hidden="true">⠿</span></span>
+          </button>
+          <button class="library-item" type="button" data-type="divider" aria-label="按住拖到画布添加">
+            <span class="component-thumbnail"><span class="sample-divider"></span></span>
+            <span class="library-caption"><span><strong>分隔线</strong><small>DIVIDER</small></span><span class="drag-grip" aria-hidden="true">⠿</span></span>
+          </button>
+        </div>
+      </aside>
+      <div id="horizontal-splitter" class="panel-splitter horizontal-splitter" role="separator" tabindex="0"
+           aria-label="调整画布和底部面板高度" aria-orientation="horizontal" aria-controls="canvas-panel component-library component-inspector"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" title="上下拖动调整高度"></div>
+      <div id="chat-splitter" class="panel-splitter vertical-splitter" role="separator" tabindex="0"
+           aria-label="调整对话框宽度" aria-orientation="vertical" aria-controls="chat-panel canvas-panel"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" title="左右拖动调整宽度"></div>
+      <aside id="chat-panel" class="panel chat-panel" aria-labelledby="chat-title">
+        <header class="panel-heading">
+          <button class="panel-fold" type="button" data-fold="chat" aria-label="收起 AI 助手" aria-expanded="true"><span class="fold-chevron" aria-hidden="true">▾</span></button>
+          <div class="heading-title"><span class="section-number">04</span><h2 id="chat-title">AI 助手</h2></div>
+          <span id="chat-status" class="badge">空闲</span>
+        </header>
+        <div class="chat-tabs" role="tablist" aria-label="视图切换">
+          <button type="button" class="chat-tab" role="tab" data-tab="chat" aria-selected="true">对话</button>
+          <button type="button" class="chat-tab" role="tab" data-tab="trace" aria-selected="false">轨迹</button>
+        </div>
+        <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+        <button id="chat-back-latest" class="chat-back-latest" type="button" hidden>↓ 回到最新</button>
+        <section id="trace-panel" class="trace-panel" hidden aria-label="执行轨迹">
+          <div id="trace-summary" class="trace-summary" role="status"></div>
+          <ol id="trace-rounds" class="trace-rounds"></ol>
+        </section>
+        <form id="chat-form" class="chat-form" autocomplete="off">
+          <div id="skill-menu" class="skill-menu" role="listbox" aria-label="选择 Skill" hidden></div>
+          <div id="skill-chip" class="skill-chip" hidden>
+            <span id="skill-chip-name"></span>
+            <button id="skill-chip-clear" type="button" aria-label="取消指定 Skill">×</button>
+          </div>
+          <div id="chat-images" class="chat-images" hidden></div>
+          <input id="chat-image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
+          <div class="chat-composer">
+            <textarea id="chat-input" rows="2" maxlength="4000"
+                      placeholder="描述想改的效果，可粘贴图片"></textarea>
+            <div class="chat-composer-tools">
+              <button id="chat-image-add" class="chat-attach" type="button" aria-label="添加图片" title="添加图片">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </button>
+              <button id="chat-send" class="chat-send" type="submit">发送</button>
+            </div>
+          </div>
+        </form>
+      </aside>
+      <section id="component-inspector" class="panel inspector" aria-labelledby="inspector-title">
+        <header class="panel-heading">
+          <button class="panel-fold" type="button" data-fold="inspector" aria-label="收起底部面板" aria-expanded="true"><span class="fold-chevron" aria-hidden="true">▾</span></button>
+          <div class="heading-title"><span class="section-number">03</span><h2 id="inspector-title" class="sr-only">组件配置</h2>
+            <div class="bottom-tabs" role="group" aria-label="底部面板"><button type="button" data-panel="timeline" aria-pressed="true">时间轴</button><button type="button" data-panel="properties" aria-pressed="false">属性</button></div>
+            <span id="selection-label" class="badge" hidden></span>
+          </div>
+          <button id="delete-component" class="delete-button" type="button" hidden>删除组件</button>
+        </header>
+        <div id="timeline-panel" class="timeline-panel">
+          <div class="timeline-toolbar">
+            <div class="playback-controls"><button id="timeline-play" type="button">▷ 播放</button><button id="timeline-stop" type="button">停止</button><output id="timeline-clock">0.0 / 10.0s</output></div>
+            <fieldset id="timeline-fields" disabled>
+              <label>效果<select id="timeline-effect"><option value="none">无动画</option><option value="shadow">阴影加重</option><option value="scale">放大</option><option value="rotate">旋转一圈</option></select></label>
+              <label>开始<input id="timeline-start" type="number" min="0" max="9.9" step="0.1" value="0"><span>s</span></label>
+              <label>时长<input id="timeline-duration" type="number" min="0.1" max="10" step="0.1" value="0.7"><span>s</span></label>
+            </fieldset>
+          </div>
+          <div class="timeline-scroll">
+            <div class="timeline-ruler"><span class="track-name">组件</span><div id="timeline-ruler" class="ruler-rail" aria-label="点击时间刻度定位播放头"><span>0s</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10s</span></div></div>
+            <div id="timeline-tracks"></div>
+            <p id="timeline-empty" class="timeline-empty">请先添加组件</p>
+          </div>
+        </div>
+        <div id="properties-panel" class="properties-panel" hidden>
+        <div id="inspector-empty" class="inspector-empty"><span aria-hidden="true">↖</span><div><strong>请先选择组件</strong><p>点击画布中的组件，编辑内容并设置它的动画。</p></div></div>
+        <form id="inspector-form" hidden autocomplete="off">
+          <fieldset id="inspector-fields" class="inspector-fields">
+            <div class="component-size-fields">
+              <label for="component-width">宽度（px）</label><input id="component-width" type="number" min="40" step="1">
+              <label for="component-height">高度（px）</label><input id="component-height" type="number" min="24" step="1">
+            </div>
+            <div id="content-fields" class="content-fields">
+              <label id="content-label" for="component-content">文字内容</label><input id="component-content" type="text" maxlength="200">
+              <div id="description-field" hidden><label for="component-description">卡片描述</label><textarea id="component-description" rows="2" maxlength="500"></textarea></div>
+            </div>
+            <div class="animation-fields">
+              <label for="animation-trigger">触发方式</label>
+              <select id="animation-trigger"><option value="click">点击时</option><option value="hover">鼠标悬停时</option></select>
+              <p class="field-note">在预览模式中体验交互</p>
+            </div>
+            <div class="effect-fields">
+              <label for="animation-effect">动画效果</label>
+              <select id="animation-effect"><option value="none">无动画</option><option value="shadow">阴影加重</option><option value="scale">放大</option><option value="rotate">旋转一圈</option></select>
+              <p id="animation-description" class="field-note"></p>
+            </div>
+            <div class="color-fields">
+              <label>颜色</label>
+              <div class="color-actions">
+                <button id="text-color-button" type="button" data-color-property="textColor"><i aria-hidden="true"></i>文字 <code>默认</code></button>
+                <button id="background-color-button" type="button" data-color-property="backgroundColor"><i aria-hidden="true"></i><span id="background-color-label">背景</span> <code>默认</code></button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <p id="preview-notice" class="preview-notice" hidden>正在预览：点击或悬停组件体验效果，返回编辑模式可修改配置。</p>
+        </div>
+      </section>
+    </div>
+  </main>
+  <dialog id="color-palette" class="color-dialog" aria-labelledby="palette-title">
+    <form id="color-form" novalidate>
+      <header class="color-dialog-heading"><h2 id="palette-title">编辑颜色</h2><button id="color-default" type="button">恢复默认</button></header>
+      <div class="color-dialog-body">
+        <div class="color-picker-main">
+          <div id="color-spectrum" class="color-spectrum" role="slider" tabindex="0" aria-label="色相与饱和度" aria-valuemin="0" aria-valuemax="360" aria-valuenow="0"><span id="spectrum-cursor"></span></div>
+          <div id="color-preview" class="color-preview" aria-label="颜色预览"></div>
+          <div id="color-brightness" class="color-brightness" role="slider" tabindex="0" aria-label="亮度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span id="brightness-cursor"></span></div>
+          <div class="color-values">
+            <label class="sr-only" for="color-hex">HEX 颜色值</label><input id="color-hex" type="text" maxlength="7" spellcheck="false" placeholder="#000000" autocomplete="off">
+            <span class="color-model">RGB</span>
+            <label><input id="color-red" type="number" min="0" max="255" step="1">红色</label>
+            <label><input id="color-green" type="number" min="0" max="255" step="1">绿色</label>
+            <label><input id="color-blue" type="number" min="0" max="255" step="1">蓝色</label>
+            <p id="color-error" class="color-error" role="status"></p>
+          </div>
+        </div>
+        <div class="color-collections">
+          <section><h3>基本颜色</h3><div id="basic-colors" class="basic-colors" role="group" aria-label="基本颜色"></div></section>
+          <section><div class="custom-color-heading"><h3>自定义颜色</h3><button id="add-custom-color" type="button" aria-label="保存当前颜色到自定义颜色" title="保存当前颜色">＋</button></div><div id="custom-colors" class="custom-colors" role="group" aria-label="自定义颜色"></div><p id="custom-color-status" role="status"></p></section>
+        </div>
+      </div>
+      <footer class="color-dialog-actions"><button id="color-confirm" type="submit">确定</button><button id="color-cancel" type="button">取消</button></footer>
+    </form>
+  </dialog>
+</body>
+</html>
